@@ -36,6 +36,7 @@ public class UserControllerTest {
         user.setBirthday(LocalDate.of(1612, 02, 16));
     }
 
+
     @Test
     public void shouldThrowsExceptionIfLoginIsEmpty() {
         user.setLogin("");
