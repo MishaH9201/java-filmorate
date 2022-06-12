@@ -2,10 +2,13 @@ package ru.yandex.practicum.filmorate.controller;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exeption.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.serves.InstallerId;
+import ru.yandex.practicum.filmorate.serves.Validator;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -18,6 +21,7 @@ import java.util.Map;
 @RequestMapping("/films")
 public class FilmController {
     private final Map<Integer, Film> films = new HashMap<>();
+    private static int id = 0;
 
     @GetMapping
     public Collection<Film> findAll() {
@@ -27,44 +31,20 @@ public class FilmController {
     }
 
     @PostMapping
-    public Film create(@Valid @RequestBody Film film , Errors error) {
-        valid(film,films);
-        if(error.hasErrors()){
-            throw new ValidationException();
-        }
+    public Film create(@Valid @RequestBody Film film) {
+        InstallerId.setId(film, films);
+        Validator.validate(film);
         films.put(film.getId(), film);
-log.info("Film added");
+        log.info("Film added");
         return film;
     }
 
     @PutMapping
-    public Film put(@Valid @RequestBody Film film, Errors error) {
-        valid(film, films);
-        if(error.hasErrors()){
-            throw new ValidationException();
-        }
+    public Film put(@Valid @RequestBody Film film) {
+        InstallerId.setId(film, films);
+        Validator.validate(film);
         films.put(film.getId(), film);
         log.info("Film update");
         return film;
     }
-
-    public static Film valid(Film film,Map<Integer,Film> films){
-        int id=0;
-        final LocalDate beginningOfCinema=LocalDate.of(1895,12,28);
-        if(film.getReleaseDate().isBefore(beginningOfCinema)){
-            throw new ValidationException("Wrong release date");
-        }
-        if(film.getId()==0){
-            id++;
-            while(films.containsKey(id)){
-                id++;
-            }
-            film.setId(id);
-        }
-        if(film.getId()<0){
-            throw new ValidationException("Negative ID");
-        }
-        return film;
-    }
-
 }

@@ -7,8 +7,10 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 import ru.yandex.practicum.filmorate.exeption.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.serves.InstallerId;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -17,6 +19,7 @@ import javax.validation.ValidatorFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.http.HttpStatus.MULTI_STATUS;
 
 public class UserControllerTest {
     private static Validator validator;
@@ -61,16 +64,16 @@ public class UserControllerTest {
     public void shouldThrowsExceptionIfLoginContainsSpace() {
         user.setLogin("Антониус Блок");
         final ValidationException exception = assertThrows(ValidationException.class,
-                () -> UserController.valid(user, new HashMap<>()));
-        assertEquals("Login contains spase", exception.getMessage());
+                () -> ru.yandex.practicum.filmorate.serves.Validator.validate(user));
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
     }
 
     @Test
     public void shouldThrowsExceptionIfIdIsNegative() {
         user.setId(-1);
         final ValidationException exception = assertThrows(ValidationException.class,
-                () -> UserController.valid(user, new HashMap<>()));
-        assertEquals("Negative ID", exception.getMessage());
+                () -> InstallerId.setId(user, new HashMap<>()));
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatus());
     }
 }
 
