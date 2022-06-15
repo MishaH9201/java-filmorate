@@ -5,6 +5,8 @@ import lombok.Data;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 @Data
 public class User {
@@ -16,4 +18,5 @@ private  String email;
 private  String login;
     @Past(message = "User's birthday in the future")
 private LocalDate birthday;
+private Set<User> friends;
 }
