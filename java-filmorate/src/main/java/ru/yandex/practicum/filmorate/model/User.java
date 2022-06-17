@@ -18,5 +18,9 @@ private  String email;
 private  String login;
     @Past(message = "User's birthday in the future")
 private LocalDate birthday;
-private Set<User> friends;
+private Set<Integer> friends;
+
+public void addFriend(int idFriend){
+friends.add(idFriend);
+}
 }
