@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -74,6 +75,12 @@ public class UserControllerTest {
         final ValidationException exception = assertThrows(ValidationException.class,
                 () -> InstallerId.setId(user, new HashMap<>()));
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatus());
+    }
+
+    @Test
+    public void shouldListFrinds() {
+        user.setFriends(new HashSet<Integer>(1,2));
+
     }
 }
 

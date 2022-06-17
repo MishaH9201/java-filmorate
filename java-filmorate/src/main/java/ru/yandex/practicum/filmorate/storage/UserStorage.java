@@ -8,9 +8,11 @@ public interface UserStorage {
 
     User addUser(User user);
 
-    User deleteUser(User user);
+    void deleteUser(Integer id);
 
     User putUser(User user);
 
     Collection<User> findAll();
+
+    User getUserById(int id);
 }
