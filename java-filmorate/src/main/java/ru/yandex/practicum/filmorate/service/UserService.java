@@ -23,49 +23,49 @@ UserService {
         this.userStorage = userStorage;
     }
 
-    public User addFriend(int id, int friendId){
-            User user = checksUsers(id);
-            User userFriend=checksUsers(friendId);
-            user.addFriend(friendId);
-            userFriend.addFriend(id);
-            return user;
+    public User addFriend(int id, int friendId) {
+        User user = checksUsers(id);
+        User userFriend = checksUsers(friendId);
+        user.addFriend(friendId);
+        userFriend.addFriend(id);
+        return user;
     }
 
     public Collection<User> getAllFriends(int id) {
-       User user = checksUsers(id);
-        return   user
+        User user = checksUsers(id);
+        return user
                 .getFriends()
                 .stream()
                 .map(p -> userStorage.getUsers().get(p))
                 .collect(Collectors.toList());
-        }
+    }
 
 
     public Collection<User> getJointFriends(int id, Integer otherId) {
         checksUsers(id);
         checksUsers(otherId);
-            return getAllFriends(id)
-                    .stream().filter(p -> p.getFriends()
-                            .contains(otherId))
-                    .collect(Collectors.toList());
+        return getAllFriends(id)
+                .stream().filter(p -> p.getFriends()
+                        .contains(otherId))
+                .collect(Collectors.toList());
     }
 
-    public void deleteFriend(int id,int friendId) {
-            User user = checksUsers(id);
-            User userFriend=checksUsers(friendId);
-            if(user.getFriends().contains(friendId)) {
-                user.deleteFriend(friendId);
-                userFriend.deleteFriend(id);
-            }
+    public void deleteFriend(int id, int friendId) {
+        User user = checksUsers(id);
+        User userFriend = checksUsers(friendId);
+        if (user.getFriends().contains(friendId)) {
+            user.deleteFriend(friendId);
+            userFriend.deleteFriend(id);
+        }
     }
 
-public User checksUsers(int id){
-    Map users= userStorage.getUsers();
-    if(users.containsKey(id)){
-        return (User) users.get(id);
-    }else{
-        throw new ValidationException(HttpStatus.NOT_FOUND,"Id is not found");
+    public User checksUsers(int id) {
+        Map users = userStorage.getUsers();
+        if (users.containsKey(id)) {
+            return (User) users.get(id);
+        } else {
+            throw new ValidationException(HttpStatus.NOT_FOUND, "Id is not found");
+        }
     }
-}
 
 }

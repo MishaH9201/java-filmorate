@@ -11,20 +11,21 @@ import java.util.Set;
 
 @Data
 public class User {
-private  int id;
-private  String name;
+    private int id;
+    private String name;
     @Email(message = "Wrong format email")
-private  String email;
+    private String email;
     @NotBlank(message = "Login is empty")
-private  String login;
+    private String login;
     @Past(message = "User's birthday in the future")
-private LocalDate birthday;
-private Set<Integer> friends=new HashSet<>();
+    private LocalDate birthday;
+    private Set<Integer> friends = new HashSet<>();
 
-public void addFriend(int idFriend){
-friends.add(idFriend);
-}
-public void deleteFriend(int idFriend){
-    friends.remove(idFriend);
-}
+    public void addFriend(int idFriend) {
+        friends.add(idFriend);
+    }
+
+    public void deleteFriend(int idFriend) {
+        friends.remove(idFriend);
+    }
 }
