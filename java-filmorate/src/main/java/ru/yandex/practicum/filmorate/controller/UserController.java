@@ -2,88 +2,79 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exeption.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.serves.InstallerId;
-import ru.yandex.practicum.filmorate.serves.UserService;
-import ru.yandex.practicum.filmorate.serves.Validator;
+import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
-    private final InMemoryUserStorage inMemoryUserStorage;
+    private final UserStorage userStorage;
 
     @Autowired
-    public UserController(UserService userService, InMemoryUserStorage inMemoryUserStorage) {
+    public UserController(UserService userService, UserStorage userStorage) {
         this.userService = userService;
-        this.inMemoryUserStorage=inMemoryUserStorage;
+        this.userStorage =userStorage;
     }
 
     @GetMapping
     public Collection<User> findAll() {
         log.info("Users get");
-        return inMemoryUserStorage.findAll();
+        return userStorage.findAll();
     }
 
     @GetMapping("/{id}")
     public User getUserById(@PathVariable int id){
-        return inMemoryUserStorage.getUserById(id);
+        return userStorage.getUserById(id);
     }
 
     @PostMapping
     public User create(@Valid @RequestBody User user) {
-       // InstallerId.setId(user, users);
-       // Validator.validate(user);
-       // users.put(user.getId(), user);
-        inMemoryUserStorage.addUser(user);
+        userStorage.addUser(user);
         log.info("User update");
         return user;
     }
 
     @PutMapping
     public User put(@Valid @RequestBody User user) {
-       // InstallerId.setId(user, users);
-      //  Validator.validate(user);
-    //    users.put(user.getId(), user);
-        inMemoryUserStorage.putUser(user);
+        userStorage.putUser(user);
         log.info("User added");
         return user;
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public User addFriend(@PathVariable int id, @PathVariable int friendId ){
+    public User addFriend(@PathVariable Integer id, @PathVariable Integer friendId ){
+        log.info("Friend added");
         return userService.addFriend(id, friendId);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable int id){
-         inMemoryUserStorage.deleteUser(id);
-    }
-
-    @DeleteMapping("/{id}/friends/{friendId}")
-    public void deleteFriend(@PathVariable int id, @PathVariable int friendId){
-        userService.deleteFriend(id,friendId);
+    @DeleteMapping(value = {"/{id}", "/{id}/friends/{friendId}"})
+    public void deleteUserOrFriend(@PathVariable Integer id, @PathVariable(required = false) Integer friendId) {
+        if (friendId != null) {
+            log.info("Delete friend");
+            userService.deleteFriend(id,friendId);
+        } else {
+            log.info("Delete user");
+            userStorage.deleteUser(id);
+        }
     }
 
     @GetMapping(value = {"/{id}/friends", "/{id}/friends/common/{otherId}"} )
-    public Collection<User> getFriends(@PathVariable int id, @PathVariable(required = false) Integer  otherId ){
+    public Collection<User> getFriends(@PathVariable Integer id, @PathVariable(required = false) Integer  otherId ){
         if(otherId != null){
+            log.info("Friend get");
           return userService.getJointFriends(id, otherId);
+        }else {
+            log.info("Friends get");
+            return userService.getAllFriends(id);
         }
-    return userService.getAllFriends(id);
     }
-
-
 }
 
