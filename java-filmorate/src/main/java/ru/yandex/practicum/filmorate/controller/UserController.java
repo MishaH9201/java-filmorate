@@ -15,66 +15,66 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
     private final UserService userService;
-    private final UserStorage userStorage;
 
     @Autowired
-    public UserController(UserService userService, UserStorage userStorage) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.userStorage =userStorage;
     }
 
     @GetMapping
     public Collection<User> findAll() {
         log.info("Users get");
-        return userStorage.findAll();
+        return userService.findAllUsers();
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable int id){
-        return userStorage.getUserById(id);
+    public User getUserById(@PathVariable int id) {
+        log.info("User get");
+        return userService.getUserById(id);
     }
 
     @PostMapping
     public User create(@Valid @RequestBody User user) {
-        userStorage.addUser(user);
         log.info("User update");
-        return user;
+        return userService.addUser(user);
     }
 
     @PutMapping
-    public User put(@Valid @RequestBody User user) {
-        userStorage.putUser(user);
+    public User updateFilm(@Valid @RequestBody User user) {
         log.info("User added");
-        return user;
+        return userService.updateUser(user);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public User addFriend(@PathVariable Integer id, @PathVariable Integer friendId ){
+    public User addFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
         log.info("Friend added");
         return userService.addFriend(id, friendId);
     }
 
-    @DeleteMapping(value = {"/{id}", "/{id}/friends/{friendId}"})
-    public void deleteUserOrFriend(@PathVariable Integer id, @PathVariable(required = false) Integer friendId) {
-        if (friendId != null) {
-            log.info("Delete friend");
-            userService.deleteFriend(id,friendId);
-        } else {
-            log.info("Delete user");
-            userStorage.deleteUser(id);
-        }
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Integer id) {
+        log.info("Delete user");
+        userService.deleteUser(id);
     }
 
-    @GetMapping(value = {"/{id}/friends", "/{id}/friends/common/{otherId}"} )
-    public Collection<User> getFriends(@PathVariable Integer id, @PathVariable(required = false) Integer  otherId ){
-        if(otherId != null){
-            log.info("Friend get");
-          return userService.getJointFriends(id, otherId);
-        }else {
-            log.info("Friends get");
-            return userService.getAllFriends(id);
-        }
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public void deleteUserOrFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
+        log.info("Delete friend");
+        userService.deleteFriend(id, friendId);
+    }
+
+    @GetMapping("/{id}/friends")
+    public Collection<User> getFriends(@PathVariable Integer id) {
+        log.info("Friends get");
+        return userService.getAllFriends(id);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public Collection<User> getJointFriends(@PathVariable Integer id, @PathVariable Integer otherId) {
+        log.info("Friend get");
+        return userService.getJointFriends(id, otherId);
     }
 }
 

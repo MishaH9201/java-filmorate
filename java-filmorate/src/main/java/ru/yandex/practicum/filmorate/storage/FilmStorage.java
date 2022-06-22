@@ -10,7 +10,7 @@ public interface FilmStorage {
 
     void deleteFilm(Integer id);
 
-    Film putFilm(Film film);
+    Film updateFilm(Film film);
 
     Collection<Film> findAll();
 

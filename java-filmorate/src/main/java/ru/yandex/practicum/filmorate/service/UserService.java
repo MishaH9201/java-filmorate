@@ -16,11 +16,35 @@ import java.util.stream.Collectors;
 public class
 UserService {
 
-    UserStorage userStorage;
+    private final UserStorage userStorage;
 
     @Autowired
     public UserService(UserStorage userStorage) {
         this.userStorage = userStorage;
+    }
+
+    public User addUser(User user) {
+        return userStorage.addUser(user);
+    }
+
+    public void deleteUser(Integer id) {
+        userStorage.deleteUser(id);
+    }
+
+    public User updateUser(User user) {
+        return userStorage.updateUser(user);
+    }
+
+    public Collection<User> findAllUsers() {
+        return userStorage.findAll();
+    }
+
+    public Map<Integer, User> getUsers() {
+        return userStorage.getUsers();
+    }
+
+    public User getUserById(int id) {
+        return userStorage.getUserById(id);
     }
 
     public User addFriend(int id, int friendId) {
@@ -45,8 +69,7 @@ UserService {
         checksUsers(id);
         checksUsers(otherId);
         return getAllFriends(id)
-                .stream().filter(p -> p.getFriends()
-                        .contains(otherId))
+                .stream().filter(p -> p.getFriends().contains(otherId))
                 .collect(Collectors.toList());
     }
 
@@ -60,12 +83,10 @@ UserService {
     }
 
     public User checksUsers(int id) {
-        Map users = userStorage.getUsers();
-        if (users.containsKey(id)) {
-            return (User) users.get(id);
+        if (getUserById(id) != null) {
+            return getUserById(id);
         } else {
             throw new ValidationException(HttpStatus.NOT_FOUND, "Id is not found");
         }
     }
-
 }

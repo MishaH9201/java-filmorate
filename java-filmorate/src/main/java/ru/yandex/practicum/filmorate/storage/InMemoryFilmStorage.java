@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class InMemoryFilmStorage implements FilmStorage{
+public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new HashMap<>();
 
     @Override
@@ -31,7 +31,7 @@ public class InMemoryFilmStorage implements FilmStorage{
     }
 
     @Override
-    public Film putFilm(Film film) {
+    public Film updateFilm(Film film) {
         if (films.containsKey(film.getId())) {
             InstallerId.setId(film, films);
             Validator.validate(film);

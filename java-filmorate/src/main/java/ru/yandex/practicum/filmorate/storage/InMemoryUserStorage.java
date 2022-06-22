@@ -31,7 +31,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User putUser(User user) {
+    public User updateUser(User user) {
         if (users.containsKey(user.getId())) {
             InstallerId.setId(user, users);
             Validator.validate(user);
