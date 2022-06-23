@@ -23,7 +23,7 @@ UserService {
         this.userStorage = userStorage;
     }
 
-<<<<<<< HEAD
+
     public User addUser(User user) {
         return userStorage.addUser(user);
     }
@@ -47,9 +47,7 @@ UserService {
     public User getUserById(int id) {
         return userStorage.getUserById(id);
     }
-
-=======
->>>>>>> origin/add-friends-likes
+    
     public User addFriend(int id, int friendId) {
         User user = checksUsers(id);
         User userFriend = checksUsers(friendId);
@@ -72,12 +70,7 @@ UserService {
         checksUsers(id);
         checksUsers(otherId);
         return getAllFriends(id)
-<<<<<<< HEAD
                 .stream().filter(p -> p.getFriends().contains(otherId))
-=======
-                .stream().filter(p -> p.getFriends()
-                        .contains(otherId))
->>>>>>> origin/add-friends-likes
                 .collect(Collectors.toList());
     }
 
@@ -91,20 +84,11 @@ UserService {
     }
 
     public User checksUsers(int id) {
-<<<<<<< HEAD
         if (getUserById(id) != null) {
             return getUserById(id);
-=======
-        Map users = userStorage.getUsers();
-        if (users.containsKey(id)) {
-            return (User) users.get(id);
->>>>>>> origin/add-friends-likes
         } else {
             throw new ValidationException(HttpStatus.NOT_FOUND, "Id is not found");
         }
     }
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/add-friends-likes
 }

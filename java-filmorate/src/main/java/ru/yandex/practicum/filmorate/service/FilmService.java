@@ -65,7 +65,7 @@ public class FilmService {
 
     public Collection<Film> getPopularFilms(Integer count) {
         return filmStorage.findAll().stream()
-                .sorted((o1, o2) -> o2.getLikes().size() - o1.getLikes().size()) //Привет,можно так оставить,по-моему достаточно аккуратно?)
+                .sorted((o1, o2) -> o2.getLikes().size() - o1.getLikes().size())
                 .limit(count)
                 .collect(Collectors.toList());
     }
