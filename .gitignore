@@ -1,3 +1,4 @@
+target/
 
 *.class
 *.log
@@ -10,7 +11,7 @@
 *.rar
 hs_err_pid*
 out/
-target/
+
 .idea/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
