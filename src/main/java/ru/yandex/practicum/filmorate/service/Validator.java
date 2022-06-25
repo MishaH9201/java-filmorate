@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.serves;
+package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.http.HttpStatus;
 import ru.yandex.practicum.filmorate.exeption.ValidationException;
@@ -26,5 +26,6 @@ public class Validator {
         }
         return film;
     }
+
 }
 

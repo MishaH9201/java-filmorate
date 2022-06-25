@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.springframework.http.HttpStatus;
 import ru.yandex.practicum.filmorate.exeption.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.serves.InstallerId;
+import ru.yandex.practicum.filmorate.service.InstallerId;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -59,7 +59,7 @@ public class FilmControllerTest {
     public void shouldThrowsExceptionIfReleaseDateBefore28December1895() {
         film.setReleaseDate(LocalDate.of(1376, 11, 21));
         final ValidationException exception = assertThrows(ValidationException.class,
-                () -> ru.yandex.practicum.filmorate.serves.Validator.validate(film));
+                () -> ru.yandex.practicum.filmorate.service.Validator.validate(film));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
     }
 
