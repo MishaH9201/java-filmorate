@@ -5,22 +5,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exeption.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.FriendDbStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class
 UserService {
 
     private final UserStorage userStorage;
+    private final FriendDbStorage friendDbStorage;
 
     @Autowired
-    public UserService(UserStorage userStorage) {
+    public UserService(UserStorage userStorage, FriendDbStorage friendDbStorage) {
         this.userStorage = userStorage;
+        this.friendDbStorage = friendDbStorage;
     }
 
 
@@ -40,55 +40,35 @@ UserService {
         return userStorage.findAll();
     }
 
-    public Map<Integer, User> getUsers() {
-        return userStorage.getUsers();
-    }
+
 
     public User getUserById(int id) {
         return userStorage.getUserById(id);
     }
     
-    public User addFriend(int id, int friendId) {
-        User user = checksUsers(id);
-        User userFriend = checksUsers(friendId);
-        user.addFriend(friendId);
-        userFriend.addFriend(id);
-        return user;
+    public void addFriend(int id, int friendId) {
+      friendDbStorage.addFriend(id,friendId);
     }
 
     public Collection<User> getAllFriends(int id) {
-        User user = checksUsers(id);
-        return user
-                .getFriends()
-                .stream()
-                .map(p -> userStorage.getUsers().get(p))
-                .collect(Collectors.toList());
+       return friendDbStorage.getAllFriends(id);
     }
 
 
     public Collection<User> getJointFriends(int id, Integer otherId) {
-        checksUsers(id);
-        checksUsers(otherId);
-        return getAllFriends(id)
-                .stream().filter(p -> p.getFriends().contains(otherId))
-                .collect(Collectors.toList());
+        return friendDbStorage.getJointFriends(id,otherId);
     }
 
     public void deleteFriend(int id, int friendId) {
-        User user = checksUsers(id);
-        User userFriend = checksUsers(friendId);
-        if (user.getFriends().contains(friendId)) {
-            user.deleteFriend(friendId);
-            userFriend.deleteFriend(id);
-        }
+        friendDbStorage.deleteFriend(id,friendId);
     }
 
-    public User checksUsers(int id) {
+   /* public User checksUsers(int id) {
         if (getUserById(id) != null) {
             return getUserById(id);
         } else {
             throw new ValidationException(HttpStatus.NOT_FOUND, "Id is not found");
         }
-    }
+    }*/
 
 }

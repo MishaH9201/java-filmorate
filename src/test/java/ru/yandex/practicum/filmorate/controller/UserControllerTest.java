@@ -1,28 +1,10 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-import ru.yandex.practicum.filmorate.exeption.ValidationException;
-import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.InstallerId;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserControllerTest {
-    private static Validator validator;
+   /* private static Validator validator;
     private final User user = new User();
 
     @BeforeAll
@@ -76,10 +58,10 @@ public class UserControllerTest {
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatus());
     }
 
-    @Test
+   /* @Test
     public void shouldListFrinds() {
         user.setFriends(new HashSet<Integer>(1,2));
 
-    }
+    }*/
 }
 

@@ -1,25 +1,22 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exeption.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.storage.LikeDbStorage;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class FilmService {
-    private final UserStorage userStorage;
+
+    private final LikeDbStorage likeDbStorage;
     private final FilmStorage filmStorage;
 
     @Autowired
-    public FilmService(UserStorage userStorage, FilmStorage filmStorage) {
-        this.userStorage = userStorage;
+    public FilmService(LikeDbStorage likeDbStorage, FilmStorage filmStorage) {
+        this.likeDbStorage = likeDbStorage;
         this.filmStorage = filmStorage;
     }
 
@@ -39,42 +36,27 @@ public class FilmService {
         return filmStorage.findAll();
     }
 
-    public Map<Integer, Film> getFilms() {
-        return filmStorage.getFilms();
-    }
+
 
     public Film getFilmById(int id) {
         return filmStorage.getFilmById(id);
     }
 
-    public Film addLike(Integer filmId, Integer userId) {
-        Film film = checksFilmsAndUsers(filmId, userId);
-        film.addLike(userId);
-        return film;
-
+    public void addLike(Integer filmId, Integer userId) {
+likeDbStorage.addLike(filmId,userId);
     }
 
     public void deleteLike(Integer filmId, Integer userId) {
-        Film film = checksFilmsAndUsers(filmId, userId);
-        if (film.getLikes().contains(userId)) {
-            film.deleteLike(userId);
-        } else {
-            throw new ValidationException(HttpStatus.NOT_FOUND, "Like does not exist");
-        }
+likeDbStorage.deleteLike(filmId,userId);
     }
 
     public Collection<Film> getPopularFilms(Integer count) {
-        return filmStorage.findAll().stream()
-                .sorted((o1, o2) -> o2.getLikes().size() - o1.getLikes().size())
-                .limit(count)
-                .collect(Collectors.toList());
+
+        return likeDbStorage.getPopularFilms(count);
+    }
     }
 
-    public Film checksFilmsAndUsers(Integer filmId, Integer userId) {
-        if (getFilmById(filmId) != null && userStorage.getUserById(userId) != null) {
-            return getFilmById(filmId);
-        } else {
-            throw new ValidationException(HttpStatus.NOT_FOUND, "Id is not found");
-        }
-    }
-}
+
+
+
+

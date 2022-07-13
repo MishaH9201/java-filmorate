@@ -1,14 +1,17 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Film {
+        @PositiveOrZero
         private  int id;
         @NotBlank(message = "Name is empty")
         private  String name;
@@ -17,13 +20,9 @@ public class Film {
         private LocalDate releaseDate;
         @Positive(message = "Negative duration")
         private int duration;
-        private Set<Integer> likes=new HashSet<>();
+        private Mpa mpa;
 
-        public void addLike(int id){
-                likes.add(id);
+        public Film(int film_id, String name, String description, LocalDate release_date) {
         }
-        public void deleteLike(int id){
-                likes.remove(id);
-        }
-    }
+}
 
