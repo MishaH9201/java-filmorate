@@ -26,13 +26,13 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User addUser(User user) {
-        String sqlQuery = "insert into USERS (EMAIL, LOGIN, NAME, BIRTHDAY) values (?, ?, ?, ?)";
+        String sqlQuery = "insert into USERS (EMAIL, NAME, LOGIN,  BIRTHDAY) values (?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"USER_ID"});
             stmt.setString(1, user.getEmail());
-            stmt.setString(2, user.getLogin());
-            stmt.setString(3, user.getName());
+            stmt.setString(2, user.getName());
+            stmt.setString(3, user.getLogin());
             final LocalDate birthday = user.getBirthday();
             if (birthday == null) {
                 stmt.setNull(4, Types.DATE);
@@ -55,6 +55,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User updateUser(User user) {
+        getUserById(user.getId());
         String sqlQuery = "update USERS set " +
                 "EMAIL = ?, NAME = ?, LOGIN = ?,BIRTHDAY = ? " +
                 "where USER_ID = ?";
@@ -79,6 +80,9 @@ public class UserDbStorage implements UserStorage {
     public User getUserById(int id) {
         final String sqlQuery = "select * from USERS where USER_ID = ?";
         final List<User> users = jdbcTemplate.query(sqlQuery, UserDbStorage::makeUser, id);
+        if(users.get(0)==null ){
+            throw new ValidationException(HttpStatus.NOT_FOUND, "User not found");
+        }
         return users.get(0);
     }
 

@@ -25,6 +25,7 @@ UserService {
 
 
     public User addUser(User user) {
+        Validator.validate(user);
         return userStorage.addUser(user);
     }
 
@@ -47,7 +48,9 @@ UserService {
     }
     
     public void addFriend(int id, int friendId) {
-      friendDbStorage.addFriend(id,friendId);
+        userStorage.getUserById(id);
+        userStorage.getUserById(friendId);
+        friendDbStorage.addFriend(id,friendId);
     }
 
     public Collection<User> getAllFriends(int id) {

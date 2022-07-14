@@ -5,9 +5,10 @@ create table if not exists MPA (
 );
 CREATE TABLE IF NOT EXISTS USERS(
                                     USER_ID INT PRIMARY KEY AUTO_INCREMENT,
+                                    EMAIL varchar(255) not null ,
                                     NAME varchar(255) not null ,
                                     LOGIN varchar(255) not null ,
-                                    EMAIL varchar(255) not null ,
+
                                     BIRTHDAY DATE
 );
 

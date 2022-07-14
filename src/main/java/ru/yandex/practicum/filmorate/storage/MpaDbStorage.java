@@ -1,7 +1,9 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import ru.yandex.practicum.filmorate.exeption.ValidationException;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 
@@ -27,6 +29,9 @@ public class MpaDbStorage {
     public Mpa getMpaById(int id) {
         final String sqlQuery = "select * from MPA where MPA_ID = ?";
         final List<Mpa> mpa = jdbcTemplate.query(sqlQuery, MpaDbStorage::makeMpa, id);
+        if(mpa.get(0)==null){
+            throw new ValidationException(HttpStatus.NOT_FOUND, "MPA not found");
+        }
         return mpa.get(0);
     }
 

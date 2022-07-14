@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Film {
-        @PositiveOrZero
         private  int id;
         @NotBlank(message = "Name is empty")
         private  String name;
@@ -21,8 +21,8 @@ public class Film {
         @Positive(message = "Negative duration")
         private int duration;
         private Mpa mpa;
+        private Set<Genre> genres;
 
-        public Film(int film_id, String name, String description, LocalDate release_date) {
-        }
+
 }
 

@@ -27,7 +27,7 @@ public class FriendDbStorage {
 
     public void addFriend(Integer id, Integer friendId) {
         String sqlQuery = "insert into FRIENDS (USER_ID, FRIEND_ID) values (?, ?)";
-        jdbcTemplate.update(sqlQuery);
+        jdbcTemplate.update(sqlQuery,id,friendId);
     }
 
 
@@ -35,14 +35,14 @@ public class FriendDbStorage {
         List<User> friends = new ArrayList<>();
         SqlRowSet srs = jdbcTemplate
                 .queryForRowSet("SELECT * FROM USERS " +
-                        "WHERE USERS_ID IN " +
+                        "WHERE USER_ID IN " +
                         "(SELECT FRIEND_ID FROM FRIENDS " +
                         "WHERE USER_ID = ?)", id);
         while (srs.next()) {
             friends.add(new User(srs.getInt("USER_ID"),
                     srs.getString("EMAIL"),
-                    srs.getString("LOGIN"),
                     srs.getString("NAME"),
+                    srs.getString("LOGIN"),
                     srs.getDate("BIRTHDAY").toLocalDate()));
         }
         return friends;

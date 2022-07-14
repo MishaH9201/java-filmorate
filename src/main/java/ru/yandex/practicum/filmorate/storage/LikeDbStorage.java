@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
@@ -36,25 +37,18 @@ public class LikeDbStorage {
                 "GROUP BY F.FILM_ID ORDER BY TOP_LIKED DESC LIMIT ?";
         SqlRowSet srs = jdbcTemplate.queryForRowSet(sql ,count );
         while (srs.next()) {
-         /*   films.add(new Film(srs.getInt("FILM_ID"),
-                    srs.getString("NAME"),
-                    srs.getString("DESCRIPTION"),
-                    srs.getDate("RELEASE_DATE").toLocalDate()),
-                    srs.getInt("DURATION"),
-                    srs.getInt("MPA_ID")
-            );*/
-            Film film=new Film();
+            int mpaId = srs.getInt("MPA_ID");
+            String mpaName = "SELECT MPA_ID, NAME FROM MPA WHERE MPA_ID = ?";
+            Mpa mpa = jdbcTemplate.query(mpaName, FilmDbStorage::makeMpa, mpaId).get(0);
+            Film film = new Film();
             film.setId(srs.getInt("FILM_ID"));
             film.setName(srs.getString("NAME"));
             film.setDescription(srs.getString("DESCRIPTION"));
             film.setDuration(srs.getInt("DURATION"));
             film.setReleaseDate(srs.getDate("RELEASE_DATE").toLocalDate());
-            film.setMpaId(srs.getInt("MPA_ID"));
+            film.setMpa(mpa);
             films.add(film);
         }
-
         return films;
-
     }
-
 }

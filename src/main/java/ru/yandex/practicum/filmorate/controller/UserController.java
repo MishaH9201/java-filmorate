@@ -35,13 +35,13 @@ public class UserController {
 
     @PostMapping
     public User create(@Valid @RequestBody User user) {
-        log.info("User update");
+        log.info("User added");
         return userService.addUser(user);
     }
 
     @PutMapping
     public User updateFilm(@Valid @RequestBody User user) {
-        log.info("User added");
+        log.info("User update");
         return userService.updateUser(user);
     }
 
