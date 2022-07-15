@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
@@ -21,7 +22,7 @@ public class Film {
         @Positive(message = "Negative duration")
         private int duration;
         private Mpa mpa;
-        private Set<Genre> genres;
+        private LinkedHashSet<Genre> genres;
 
 
 }

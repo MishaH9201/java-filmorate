@@ -5,9 +5,9 @@ create table if not exists MPA (
 );
 CREATE TABLE IF NOT EXISTS USERS(
                                     USER_ID INT PRIMARY KEY AUTO_INCREMENT,
-                                    EMAIL varchar(255) not null ,
+                                    EMAIL varchar(255) not null UNIQUE,
                                     NAME varchar(255) not null ,
-                                    LOGIN varchar(255) not null ,
+                                    LOGIN varchar(255) not null UNIQUE,
 
                                     BIRTHDAY DATE
 );
@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS GENRES(
 );
 
 CREATE TABLE IF NOT EXISTS FILM_GENRES(
-                                          FILM_ID INT REFERENCES FILMS(FILM_ID),
-                                          GENRE_ID INT REFERENCES GENRES(GENRE_ID),
+                                          FILM_ID INT REFERENCES FILMS(FILM_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                                          GENRE_ID INT REFERENCES GENRES(GENRE_ID) ON DELETE CASCADE ON UPDATE CASCADE,
                                           PRIMARY KEY (GENRE_ID,FILM_ID)
 );
 

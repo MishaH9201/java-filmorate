@@ -21,11 +21,13 @@ public class FriendDbStorage {
 
     private final JdbcTemplate jdbcTemplate;
 
+
     public FriendDbStorage(JdbcTemplate jdbcTemplate) throws ValidationException {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     public void addFriend(Integer id, Integer friendId) {
+
         String sqlQuery = "insert into FRIENDS (USER_ID, FRIEND_ID) values (?, ?)";
         jdbcTemplate.update(sqlQuery,id,friendId);
     }
@@ -41,8 +43,8 @@ public class FriendDbStorage {
         while (srs.next()) {
             friends.add(new User(srs.getInt("USER_ID"),
                     srs.getString("EMAIL"),
-                    srs.getString("NAME"),
                     srs.getString("LOGIN"),
+                    srs.getString("NAME"),
                     srs.getDate("BIRTHDAY").toLocalDate()));
         }
         return friends;

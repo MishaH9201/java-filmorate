@@ -80,7 +80,7 @@ public class UserDbStorage implements UserStorage {
     public User getUserById(int id) {
         final String sqlQuery = "select * from USERS where USER_ID = ?";
         final List<User> users = jdbcTemplate.query(sqlQuery, UserDbStorage::makeUser, id);
-        if(users.get(0)==null ){
+        if(users==null || users.isEmpty()){
             throw new ValidationException(HttpStatus.NOT_FOUND, "User not found");
         }
         return users.get(0);

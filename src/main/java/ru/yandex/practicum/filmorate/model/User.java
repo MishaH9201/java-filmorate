@@ -25,13 +25,5 @@ public class User {
     private LocalDate birthday;
 
 
-    //private Set<Integer> friends = new HashSet<>();
 
-   // public void addFriend(int idFriend) {
-     //   friends.add(idFriend);
-   // }
-
-   // public void deleteFriend(int idFriend) {
-   //     friends.remove(idFriend);
-  //  }
 }

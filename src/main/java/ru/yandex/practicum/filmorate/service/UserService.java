@@ -54,7 +54,8 @@ UserService {
     }
 
     public Collection<User> getAllFriends(int id) {
-       return friendDbStorage.getAllFriends(id);
+        userStorage.getUserById(id);
+        return friendDbStorage.getAllFriends(id);
     }
 
 
@@ -63,15 +64,10 @@ UserService {
     }
 
     public void deleteFriend(int id, int friendId) {
+        userStorage.getUserById(id);
+        userStorage.getUserById(friendId);
         friendDbStorage.deleteFriend(id,friendId);
     }
 
-   /* public User checksUsers(int id) {
-        if (getUserById(id) != null) {
-            return getUserById(id);
-        } else {
-            throw new ValidationException(HttpStatus.NOT_FOUND, "Id is not found");
-        }
-    }*/
 
 }

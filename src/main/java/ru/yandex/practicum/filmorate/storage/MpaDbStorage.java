@@ -29,7 +29,7 @@ public class MpaDbStorage {
     public Mpa getMpaById(int id) {
         final String sqlQuery = "select * from MPA where MPA_ID = ?";
         final List<Mpa> mpa = jdbcTemplate.query(sqlQuery, MpaDbStorage::makeMpa, id);
-        if(mpa.get(0)==null){
+        if(mpa==null || mpa.isEmpty()){
             throw new ValidationException(HttpStatus.NOT_FOUND, "MPA not found");
         }
         return mpa.get(0);
