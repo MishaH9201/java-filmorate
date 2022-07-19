@@ -11,6 +11,7 @@ import java.util.Objects;
 @Data
 public class Genre {
     Integer id;
+    String name;
 
     @Override
     public boolean equals(Object o) {
@@ -24,7 +25,4 @@ public class Genre {
     public int hashCode() {
         return Objects.hash(id);
     }
-
-    String name;
-
 }

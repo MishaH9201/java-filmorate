@@ -36,19 +36,10 @@ public class GenreDBStorage {
         return genres.get(0);
     }
 
-    public Genre updateGenre(Genre genre) {
-        getGenreById(genre.getId());
-        String sqlQuery = "UPDATE genres SET " +
-                " name = ? " +
-                "WHERE genre_id = ?";
-        jdbcTemplate.update(sqlQuery
-                , genre.getName());
-        return genre;
-    }
 
     public void addFilmGenre(Integer filmId, Integer genreId) {
-        String sqlQuery = "MERGE INTO  film_genres(film_id, genre_id) " +
-                "VALUES  (?, ?)";
+        String sqlQuery = "MERGE INTO film_genres(film_id, genre_id) " +
+                "VALUES (?, ?)";
         jdbcTemplate.update(sqlQuery, filmId, genreId);
     }
 
@@ -62,13 +53,13 @@ public class GenreDBStorage {
     }
 
     public void deleteFilm(Integer id) {
-        final String sqlQuery = "DELETE FROM film_genres where film_id = ?";
+        final String sqlQuery = "DELETE FROM film_genres WHERE film_id = ?";
         jdbcTemplate.update(sqlQuery, id);
     }
 
     static Genre makeGenre(ResultSet rs, int rowNum) throws SQLException {
-        return new Genre(rs.getInt("genre_id"),
-                rs.getString("name")
+        return new Genre(rs.getInt("GENRE_ID"),
+                rs.getString("NAME")
         );
     }
 

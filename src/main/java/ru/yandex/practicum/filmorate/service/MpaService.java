@@ -12,13 +12,12 @@ import java.util.List;
 
 @Service
 public class MpaService {
-
     private final MpaDbStorage mpaDbStorage;
-@Autowired
+
+    @Autowired
     public MpaService(MpaDbStorage mpaDbStorage) {
         this.mpaDbStorage = mpaDbStorage;
     }
-
 
     public Collection<Mpa> findAll() {
         return mpaDbStorage.findAll();

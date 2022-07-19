@@ -11,12 +11,13 @@ import java.util.List;
 @Service
 public class GenreService {
 
-private final GenreDBStorage genreDBStorage;
+    private final GenreDBStorage genreDBStorage;
 
-@Autowired
+    @Autowired
     public GenreService(GenreDBStorage genreDBStorage) {
         this.genreDBStorage = genreDBStorage;
     }
+
     public Collection<Genre> findAll() {
         return genreDBStorage.findAll();
     }
