@@ -1,33 +1,29 @@
-create table if not exists MPA (
-                                   MPA_ID     int not null primary key auto_increment,
+
+CREATE TABLE IF NOT EXISTS MPA (
+                                   MPA_ID     INT PRIMARY KEY AUTO_INCREMENT,
                                    NAME       varchar(255),
                                    constraint MPA_PK primary key (mpa_id)
 );
 CREATE TABLE IF NOT EXISTS USERS(
                                     USER_ID INT PRIMARY KEY AUTO_INCREMENT,
-                                    EMAIL varchar(255) not null UNIQUE,
-                                    NAME varchar(255) not null ,
-                                    LOGIN varchar(255) not null UNIQUE,
-
+                                    EMAIL varchar(255) NOT NULL UNIQUE,
+                                    NAME varchar(255) NOT NULL ,
+                                    LOGIN varchar(255) NOT NULL UNIQUE,
                                     BIRTHDAY DATE
 );
 
 CREATE TABLE IF NOT EXISTS FILMS(
-                                    FILM_ID INT not null PRIMARY KEY AUTO_INCREMENT,
-                                    NAME varchar(255) not null ,
-                                    DESCRIPTION varchar(255) not null ,
-                                    DURATION INT not null ,
+                                    FILM_ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                                    NAME varchar(255) NOT NULL ,
+                                    DESCRIPTION varchar(255) NOT NULL ,
+                                    DURATION INT NOT NULL ,
                                     RELEASE_DATE DATE,
-                                    MPA_ID INT REFERENCES MPA (MPA_ID )
-
-
+                                    mpa_id INT REFERENCES mpa (mpa_id )
 );
 
 
-
-
 CREATE TABLE IF NOT EXISTS GENRES(
-                                     GENRE_ID INT not null PRIMARY KEY AUTO_INCREMENT,
+                                     GENRE_ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
                                      NAME varchar(255) ,
                                      DESCRIPTION varchar(255)
 );

@@ -42,15 +42,14 @@ UserService {
     }
 
 
-
     public User getUserById(int id) {
         return userStorage.getUserById(id);
     }
-    
+
     public void addFriend(int id, int friendId) {
         userStorage.getUserById(id);
         userStorage.getUserById(friendId);
-        friendDbStorage.addFriend(id,friendId);
+        friendDbStorage.addFriend(id, friendId);
     }
 
     public Collection<User> getAllFriends(int id) {
@@ -60,13 +59,13 @@ UserService {
 
 
     public Collection<User> getJointFriends(int id, Integer otherId) {
-        return friendDbStorage.getJointFriends(id,otherId);
+        return friendDbStorage.getJointFriends(id, otherId);
     }
 
     public void deleteFriend(int id, int friendId) {
         userStorage.getUserById(id);
         userStorage.getUserById(friendId);
-        friendDbStorage.deleteFriend(id,friendId);
+        friendDbStorage.deleteFriend(id, friendId);
     }
 
 

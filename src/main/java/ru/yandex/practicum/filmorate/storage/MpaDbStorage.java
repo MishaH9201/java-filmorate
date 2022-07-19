@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
+
 @Repository
 public class MpaDbStorage {
 
@@ -21,15 +22,15 @@ public class MpaDbStorage {
     }
 
     public Collection<Mpa> findAll() {
-        final String sqlQuery = "select * from MPA";
+        final String sqlQuery = "SELECT * FROM mpa";
         final List<Mpa> mpa = jdbcTemplate.query(sqlQuery, MpaDbStorage::makeMpa);
         return mpa;
     }
 
     public Mpa getMpaById(int id) {
-        final String sqlQuery = "select * from MPA where MPA_ID = ?";
+        final String sqlQuery = "SELECT * FROM mpa WHERE mpa_id = ?";
         final List<Mpa> mpa = jdbcTemplate.query(sqlQuery, MpaDbStorage::makeMpa, id);
-        if(mpa==null || mpa.isEmpty()){
+        if (mpa == null || mpa.isEmpty()) {
             throw new ValidationException(HttpStatus.NOT_FOUND, "MPA not found");
         }
         return mpa.get(0);
@@ -37,8 +38,8 @@ public class MpaDbStorage {
 
 
     static Mpa makeMpa(ResultSet rs, int rowNum) throws SQLException {
-        return new Mpa(rs.getInt("MPA_ID"),
-                rs.getString("NAME")
+        return new Mpa(rs.getInt("mpa_id"),
+                rs.getString("name")
         );
     }
 }

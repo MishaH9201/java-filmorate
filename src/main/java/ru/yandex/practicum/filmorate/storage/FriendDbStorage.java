@@ -21,60 +21,53 @@ public class FriendDbStorage {
 
     private final JdbcTemplate jdbcTemplate;
 
-
     public FriendDbStorage(JdbcTemplate jdbcTemplate) throws ValidationException {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     public void addFriend(Integer id, Integer friendId) {
-
-        String sqlQuery = "insert into FRIENDS (USER_ID, FRIEND_ID) values (?, ?)";
-        jdbcTemplate.update(sqlQuery,id,friendId);
+        String sqlQuery = "INSERT INTO friends (user_id, friend_id) VALUES  (?, ?)";
+        jdbcTemplate.update(sqlQuery, id, friendId);
     }
-
 
     public Collection<User> getAllFriends(int id) {
         List<User> friends = new ArrayList<>();
         SqlRowSet srs = jdbcTemplate
-                .queryForRowSet("SELECT * FROM USERS " +
-                        "WHERE USER_ID IN " +
-                        "(SELECT FRIEND_ID FROM FRIENDS " +
-                        "WHERE USER_ID = ?)", id);
+                .queryForRowSet("SELECT * FROM users " +
+                        "WHERE user_id IN " +
+                        "(SELECT friend_id FROM FRIENDS " +
+                        "WHERE user_id = ?)", id);
         while (srs.next()) {
-            friends.add(new User(srs.getInt("USER_ID"),
-                    srs.getString("EMAIL"),
-                    srs.getString("LOGIN"),
-                    srs.getString("NAME"),
-                    srs.getDate("BIRTHDAY").toLocalDate()));
+            friends.add(new User(srs.getInt("user_id"),
+                    srs.getString("email"),
+                    srs.getString("login"),
+                    srs.getString("name"),
+                    srs.getDate("birthday").toLocalDate()));
         }
         return friends;
     }
 
-
-
-
     public Collection<User> getJointFriends(int id, Integer otherId) {
         List<User> friends = new ArrayList<>();
-        SqlRowSet srs = jdbcTemplate.queryForRowSet("SELECT * FROM USERS U WHERE U.USER_ID IN " +
-                "(SELECT FRIEND_ID FROM FRIENDS F " +
-                "WHERE F.USER_ID = ?) " +
-                "AND U.USER_ID IN (SELECT FRIEND_ID FROM FRIENDS FS " +
-                "WHERE FS.USER_ID = ?)", id, otherId);
+        SqlRowSet srs = jdbcTemplate.queryForRowSet("SELECT * FROM users u WHERE u.user_id IN " +
+                "(SELECT friend_id FROM FRIENDS f " +
+                "WHERE f.user_id = ?) " +
+                "AND u.user_id IN (SELECT friend_id FROM friends fs " +
+                "WHERE fs.user_id = ?)", id, otherId);
         while (srs.next()) {
-            friends.add(new User(srs.getInt("USER_ID"),
-                    srs.getString("EMAIL"),
-                    srs.getString("LOGIN"),
-                    srs.getString("NAME"),
-                    srs.getDate("BIRTHDAY").toLocalDate()));
+            friends.add(new User(srs.getInt("user_id"),
+                    srs.getString("email"),
+                    srs.getString("login"),
+                    srs.getString("name"),
+                    srs.getDate("birthday").toLocalDate()));
         }
         return friends;
     }
 
     public void deleteFriend(int id, int friendId) {
-        String sqlQuery = "DELETE FROM FRIENDS WHERE USER_ID = ? AND FRIEND_ID = ?";
-        jdbcTemplate.update(sqlQuery,id,friendId);
+        String sqlQuery = "DELETE FROM friends WHERE user_id = ? AND friend_id = ?";
+        jdbcTemplate.update(sqlQuery, id, friendId);
     }
-
 
 
 }

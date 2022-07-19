@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class FilmService {
@@ -22,7 +23,8 @@ public class FilmService {
     private final UserService userService;
 
     @Autowired
-    public FilmService(LikeDbStorage likeDbStorage, FilmStorage filmStorage, GenreDBStorage genreDBStorage, UserService userService) {
+    public FilmService(LikeDbStorage likeDbStorage, FilmStorage filmStorage,
+                       GenreDBStorage genreDBStorage, UserService userService) {
         this.likeDbStorage = likeDbStorage;
         this.filmStorage = filmStorage;
         this.genreDBStorage = genreDBStorage;
@@ -52,11 +54,10 @@ public class FilmService {
 
     public Film getFilmById(int id) {
         Film film = filmStorage.getFilmById(id);
-        Set<Genre> genres = new LinkedHashSet<>();
-        for (Genre genre : genreDBStorage.getFilmGenres(id)) {
-            genres.add(genre);
-        }
-        film.setGenres((LinkedHashSet<Genre>) genres);
+        film.setGenres(genreDBStorage.getFilmGenres(id)
+                .stream()
+                .collect(Collectors.toCollection(LinkedHashSet::new))
+        );
         return film;
     }
 

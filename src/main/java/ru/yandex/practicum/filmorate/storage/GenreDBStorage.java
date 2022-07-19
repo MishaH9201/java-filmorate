@@ -22,13 +22,13 @@ public class GenreDBStorage {
     }
 
     public Collection<Genre> findAll() {
-        final String sqlQuery = "select * from GENRES ";
+        final String sqlQuery = "SELECT * FROM genres";
         final List<Genre> genres = jdbcTemplate.query(sqlQuery, GenreDBStorage::makeGenre);
         return genres;
     }
 
     public Genre getGenreById(int id) {
-        final String sqlQuery = "select * from GENRES where GENRE_ID = ?";
+        final String sqlQuery = "SELECT * FROM genres WHERE genre_id = ?";
         final List<Genre> genres = jdbcTemplate.query(sqlQuery, GenreDBStorage::makeGenre, id);
         if (genres == null || genres.isEmpty()) {
             throw new ValidationException(HttpStatus.NOT_FOUND, "Genre not found");
@@ -38,37 +38,37 @@ public class GenreDBStorage {
 
     public Genre updateGenre(Genre genre) {
         getGenreById(genre.getId());
-        String sqlQuery = "update GENRES set " +
-                " NAME = ? " +
-                "where GENRE_ID = ?";
+        String sqlQuery = "UPDATE genres SET " +
+                " name = ? " +
+                "WHERE genre_id = ?";
         jdbcTemplate.update(sqlQuery
                 , genre.getName());
         return genre;
     }
 
     public void addFilmGenre(Integer filmId, Integer genreId) {
-            String sqlQuery = "merge into FILM_GENRES(FILM_ID, GENRE_ID) " +
-                    "values (?, ?)";
-            jdbcTemplate.update(sqlQuery, filmId, genreId);
-        }
+        String sqlQuery = "MERGE INTO  film_genres(film_id, genre_id) " +
+                "VALUES  (?, ?)";
+        jdbcTemplate.update(sqlQuery, filmId, genreId);
+    }
 
 
     public Collection<Genre> getFilmGenres(Integer filmId) {
-        final String sqlQuery = "select * from GENRES AS i " +
-                "RIGHT JOIN FILM_GENRES AS a  ON i.GENRE_ID = a.GENRE_ID " +
-                "WHERE a.FILM_ID = ?";
-        final List<Genre> g = jdbcTemplate.query(sqlQuery, GenreDBStorage::makeGenre, filmId);
-        return g;
+        final String sqlQuery = "SELECT * FROM genres AS i " +
+                "RIGHT JOIN film_genres AS a  ON i.genre_id = a.genre_id " +
+                "WHERE a.film_id = ?";
+        final List<Genre> genres = jdbcTemplate.query(sqlQuery, GenreDBStorage::makeGenre, filmId);
+        return genres;
     }
 
     public void deleteFilm(Integer id) {
-        final String sqlQuery = "delete from FILM_GENRES where FILM_ID = ?";
+        final String sqlQuery = "DELETE FROM film_genres where film_id = ?";
         jdbcTemplate.update(sqlQuery, id);
     }
 
     static Genre makeGenre(ResultSet rs, int rowNum) throws SQLException {
-        return new Genre(rs.getInt("GENRE_ID"),
-                rs.getString("NAME")
+        return new Genre(rs.getInt("genre_id"),
+                rs.getString("name")
         );
     }
 

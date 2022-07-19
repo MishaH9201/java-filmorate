@@ -13,39 +13,39 @@ import java.util.List;
 
 @Repository
 public class LikeDbStorage {
-        private final JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     public LikeDbStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     public void addLike(Integer filmId, Integer userId) {
-        String sql = "INSERT INTO LIKES (FILM_ID, USER_ID) VALUES (?, ?)";
+        String sql = "INSERT INTO likes (film_id, user_id) VALUES (?, ?)";
         jdbcTemplate.update(sql, filmId, userId);
     }
 
     public void deleteLike(Integer filmId, Integer userId) {
-        String sql = "DELETE FROM LIKES WHERE FILM_ID = ? AND USER_ID = ?";
+        String sql = "DELETE FROM likes WHERE film_id = ? AND user_id = ?";
         jdbcTemplate.update(sql, filmId, userId);
     }
 
     public Collection<Film> getPopularFilms(Integer count) {
         List<Film> films = new ArrayList<>();
-        String sql = "SELECT F.FILM_ID, F.NAME, F.DESCRIPTION, F.RELEASE_DATE, F.DURATION, F.MPA_ID, " +
-                "COUNT(U.USER_ID) AS TOP_LIKED FROM FILMS F " +
-                "LEFT OUTER JOIN LIKES U ON F.FILM_ID = U.FILM_ID " +
-                "GROUP BY F.FILM_ID ORDER BY TOP_LIKED DESC LIMIT ?";
-        SqlRowSet srs = jdbcTemplate.queryForRowSet(sql ,count );
+        String sql = "SELECT f.film_id, f.name, f.description, f.release_date, f.duration, f.mpa_id, " +
+                "COUNT(u.user_id) AS top_liked FROM films f " +
+                "LEFT OUTER JOIN likes U ON f.film_id = u.film_id " +
+                "GROUP BY f.film_id ORDER BY top_liked DESC LIMIT ?";
+        SqlRowSet srs = jdbcTemplate.queryForRowSet(sql, count);
         while (srs.next()) {
-            int mpaId = srs.getInt("MPA_ID");
-            String mpaName = "SELECT MPA_ID, NAME FROM MPA WHERE MPA_ID = ?";
+            int mpaId = srs.getInt("mpa_id");
+            String mpaName = "SELECT mpa_id, name FROM mpa WHERE mpa_id = ?";
             Mpa mpa = jdbcTemplate.query(mpaName, FilmDbStorage::makeMpa, mpaId).get(0);
             Film film = new Film();
-            film.setId(srs.getInt("FILM_ID"));
-            film.setName(srs.getString("NAME"));
-            film.setDescription(srs.getString("DESCRIPTION"));
-            film.setDuration(srs.getInt("DURATION"));
-            film.setReleaseDate(srs.getDate("RELEASE_DATE").toLocalDate());
+            film.setId(srs.getInt("film_id"));
+            film.setName(srs.getString("name"));
+            film.setDescription(srs.getString("description"));
+            film.setDuration(srs.getInt("duration"));
+            film.setReleaseDate(srs.getDate("release_date").toLocalDate());
             film.setMpa(mpa);
             films.add(film);
         }

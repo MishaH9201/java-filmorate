@@ -26,10 +26,10 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User addUser(User user) {
-        String sqlQuery = "insert into USERS (EMAIL, NAME, LOGIN,  BIRTHDAY) values (?, ?, ?, ?)";
+        String sqlQuery = "INSERT INTO users (email, name, login,  birthday) VALUES  (?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
-            PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"USER_ID"});
+            PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"user_id"});
             stmt.setString(1, user.getEmail());
             stmt.setString(2, user.getName());
             stmt.setString(3, user.getLogin());
@@ -48,7 +48,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public void deleteUser(Integer id) {
-        String sqlQuery = "delete from USERS where USER_ID = ?";
+        String sqlQuery = "DELETE FROM users WHERE user_id = ?";
         jdbcTemplate.update(sqlQuery, id);
     }
 
@@ -56,9 +56,9 @@ public class UserDbStorage implements UserStorage {
     @Override
     public User updateUser(User user) {
         getUserById(user.getId());
-        String sqlQuery = "update USERS set " +
-                "EMAIL = ?, NAME = ?, LOGIN = ?,BIRTHDAY = ? " +
-                "where USER_ID = ?";
+        String sqlQuery = "UPDATE users SET " +
+                "email = ?, name = ?, login = ?,birthday = ? " +
+                "WHERE user_id = ?";
         jdbcTemplate.update(sqlQuery
                 , user.getEmail()
                 , user.getName()
@@ -70,7 +70,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public Collection<User> findAll() {
-        final String sqlQuery = "select * from USERS ";
+        final String sqlQuery = "SELECT * FROM users ";
         final List<User> users = jdbcTemplate.query(sqlQuery, UserDbStorage::makeUser);
         return users;
     }
@@ -78,19 +78,19 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User getUserById(int id) {
-        final String sqlQuery = "select * from USERS where USER_ID = ?";
+        final String sqlQuery = "SELECT * FROM users WHERE user_id = ?";
         final List<User> users = jdbcTemplate.query(sqlQuery, UserDbStorage::makeUser, id);
-        if(users==null || users.isEmpty()){
+        if (users == null || users.isEmpty()) {
             throw new ValidationException(HttpStatus.NOT_FOUND, "User not found");
         }
         return users.get(0);
     }
 
     static User makeUser(ResultSet rs, int rowNum) throws SQLException {
-        return new User(rs.getInt("USER_ID"),
-                rs.getString("EMAIL"),
-                rs.getString("LOGIN"),
-                rs.getString("NAME"),
-                rs.getDate("BIRTHDAY").toLocalDate());
+        return new User(rs.getInt("user_id"),
+                rs.getString("email"),
+                rs.getString("login"),
+                rs.getString("name"),
+                rs.getDate("birthday").toLocalDate());
     }
 }

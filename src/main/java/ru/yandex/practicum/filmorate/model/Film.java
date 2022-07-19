@@ -22,8 +22,6 @@ public class Film {
         @Positive(message = "Negative duration")
         private int duration;
         private Mpa mpa;
-        private LinkedHashSet<Genre> genres;
-
-
+        private Set<Genre> genres;
 }
 
