@@ -5,13 +5,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import ru.yandex.practicum.filmorate.exeption.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.InstallerId;
+import ru.yandex.practicum.filmorate.service.UserService;
+
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -21,9 +26,13 @@ import javax.validation.ValidatorFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@SpringBootTest
+@AutoConfigureTestDatabase
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UserControllerTest {
     private static Validator validator;
     private final User user = new User();
+    private final UserService userService;
 
     @BeforeAll
     public static void setup() {
@@ -72,14 +81,8 @@ public class UserControllerTest {
     public void shouldThrowsExceptionIfIdIsNegative() {
         user.setId(-1);
         final ValidationException exception = assertThrows(ValidationException.class,
-                () -> InstallerId.setId(user, new HashMap<>()));
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatus());
+                () -> userService.addUser(user));
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
     }
 
-    @Test
-    public void shouldListFrinds() {
-        user.setFriends(new HashSet<Integer>(1,2));
-
-    }
 }
-

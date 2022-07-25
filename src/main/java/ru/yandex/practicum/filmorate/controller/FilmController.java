@@ -59,9 +59,9 @@ public class FilmController {
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public Film addLike(@PathVariable Integer id, @PathVariable Integer userId) {
+    public void addLike(@PathVariable Integer id, @PathVariable Integer userId) {
         log.info("Like added");
-        return filmService.addLike(id, userId);
+        filmService.addLike(id, userId);
     }
 
     @GetMapping("/popular")

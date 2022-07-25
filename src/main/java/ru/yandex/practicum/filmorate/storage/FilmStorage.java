@@ -14,7 +14,6 @@ public interface FilmStorage {
 
     Collection<Film> findAll();
 
-    Map<Integer, Film> getFilms();
 
     Film getFilmById(int id);
 }

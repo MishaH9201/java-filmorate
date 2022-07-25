@@ -13,6 +13,9 @@ public class Validator {
         if (user.getLogin().contains(" ")) {
             throw new ValidationException(HttpStatus.BAD_REQUEST , "Login contains spase");
         }
+        if(user.getId()<0){
+            throw new ValidationException(HttpStatus.BAD_REQUEST , "Id is negative");
+        }
         if (user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
@@ -23,6 +26,9 @@ public class Validator {
         final LocalDate beginningOfCinema = LocalDate.of(1895, 12, 28);
         if (film.getReleaseDate().isBefore(beginningOfCinema)) {
             throw new ValidationException(HttpStatus.BAD_REQUEST, "Wrong release date");
+        }
+        if(film.getId()<0){
+            throw new ValidationException(HttpStatus.BAD_REQUEST , "Id is negative");
         }
         return film;
     }
